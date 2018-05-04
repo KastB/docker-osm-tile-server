@@ -118,22 +118,4 @@ ADD ./scripts/init.sh /bin/init.sh
 
 RUN chmod a+x /bin/init.sh
 
-# Map data
-
-ARG DATA=world_latest.pbf
-ARG OSM2PGSQL_RAM=2000
-ARG OSM2PGSQL_PROCESSES=1
-
-USER root
-RUN cd
-COPY $DATA /$DATA
-RUN chmod 777 /$DATA
-RUN  file=$(echo "$DATA" | sed "s/.*\///") && \
-     /etc/init.d/postgresql start && sleep 5 && su $OSM_USER -c "osm2pgsql -d gis \
-    --create --slim  -G --hstore --tag-transform-script \
-    ~/src/openstreetmap-carto/openstreetmap-carto.lua \
-    -C $OSM2PGSQL_RAM --number-processes $OSM2PGSQL_PROCESSES \
-    -S ~/src/openstreetmap-carto/openstreetmap-carto.style \
-    /$file"
-
 CMD /bin/init.sh
