@@ -80,21 +80,27 @@ RUN cd /home/$OSM_USER/src/mod_tile && \
 
 # Stylesheet
 USER root
-RUN apt-get -y install npm nodejs-legacy
+RUN apt-get install -y apt-utils curl &&\
+curl -sL https://deb.nodesource.com/setup_14.x > install_node.sh && bash ./install_node.sh && \
+apt-get update && \
+apt-get -y install nodejs
 RUN npm install -g carto
 
 USER $OSM_USER
 RUN cd ~/src && \
     git clone https://github.com/gravitystorm/openstreetmap-carto.git && \
-    cd openstreetmap-carto && \
+    cd openstreetmap-carto &&\
     carto -v && \
     carto project.mml > mapnik.xml
 
-# Shapefile
+# 	
+USER root
+RUN apt-get install -y python3-pip 
+RUN pip3 install pyyaml argparse requests psycopg2
 
-USER $OSM_USER 
-RUN cd ~/src/openstreetmap-carto/ && \
-    scripts/get-shapefiles.py
+# USER $OSM_USER 
+# RUN cd ~/src/openstreetmap-carto/ && \
+#     scripts/get-external-data.py
 
 # Fonts
 

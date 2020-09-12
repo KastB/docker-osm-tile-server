@@ -15,7 +15,9 @@ docker build -t osm:bodensee .
 
 To run the newly built container (and access the tile server from port 8008 for example), just run:
 
-`docker run -p 8008:80 -v ~/data/:/data -e DATA="/data/bodensee.osm.bz2" osm:bodensee`
+`docker run -p 8008:80 -v /data/:/data -e DATA="/data/osm/data.osm.bz2" osm:bodensee`
+ 
+
 
 Assuming the container is running locally, you can then test it works by pointing your browser at (you should see a single tile):
 

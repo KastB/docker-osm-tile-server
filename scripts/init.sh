@@ -11,6 +11,8 @@ echo $DATA
 file=$(echo "$DATA" | sed "s/.*\///")
 echo $file
 chmod 777 $DATA
+
+su - renderaccount -c "cd ~/src/openstreetmap-carto/ && ./scripts/get-external-data.py"
 su renderaccount -c "osm2pgsql -d gis \
 --create --slim  -G --hstore --tag-transform-script \
 ~/src/openstreetmap-carto/openstreetmap-carto.lua \
